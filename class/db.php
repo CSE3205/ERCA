@@ -9,7 +9,7 @@ class DB {
 	private function __construct() {
 		try {
 			$this->pdo = new PDO(
-						'mysql:host=' . Config::get('mysql/host'). 
+						'mysql:host='. Config::get('mysql/host').
 						';dbname=' .Config::get('mysql/db'), 
 						Config::get('mysql/username'), 
 						Config::get('mysql/password')

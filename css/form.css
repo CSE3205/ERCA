@@ -1,0 +1,47 @@
+input{
+	border-radius: 15px;
+    width: 300;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+input:focus {
+    border: 3px solid #555;
+}
+
+#fname{
+	position: absolute;
+	left: 400px;
+	top:8px;
+}
+#lname{
+	position: absolute;
+	left: 400px;
+	top:70px;
+}
+.field{
+	left: 35px;
+}
+
+.fieldr{
+	position:absolute;
+	left:440px;
+}
+#kurt{
+	position:absloute;
+	top:140px;
+    
+}
+#book{
+	position:absloute;
+	top:160px;
+}
+#vehicle{
+	position:absloute;
+	top:180px;
+}
