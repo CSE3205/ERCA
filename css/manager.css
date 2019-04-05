@@ -8,24 +8,16 @@
 #nav {
     line-height:30px;
     background-color:#eeeeee;
-    height:550px;
-    width:150px;
+    height:400;
     float:left;
     padding:5px;	      
 }
 #Lside {
-    width:750px;
+    width:800px;
     float:left;
-     height:550px;
+     height:400;
     padding:10px;	 	 
 }
-#Rside {
-    line-height:30px;
-    background-color:#ffeeee;
-     height:550px;
-    width:350px;
-    float:right;
-     padding:5px; 
 }
 
 #footer {

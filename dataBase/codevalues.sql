@@ -1,7 +1,7 @@
 insert into tot values("service",0.1);
 insert into tot values("sales",0.02);
 
-insert into vat values("vat",0.15);
+insert into Vat values("vat",0.15);
 
 insert into tax values(7201,0.1,720);
 insert into tax values(19801,0.15,1710);
@@ -103,39 +103,8 @@ insert into clean_up values(35000000,0.00035,10000000,8475);
 insert into clean_up values(65000000,0.00027,35000000,17225);
 
 
+insert into users values('henz123','henz123','Henok','Fekade','Abebe','employee','hired',curdate());
+insert into users values('kal123','kal123','Kaleab','Alebachew','MOlla','manager','hired',curdate());
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+CREATE USER 'app'@'%' IDENTIFIED BY '***';GRANT SELECT ON *.* TO 'app'@'%';
+	

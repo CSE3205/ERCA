@@ -3,27 +3,25 @@
     color:white;
     text-align:center;
     padding:5px;
-    height:50px;
 }
 #nav {
     line-height:30px;
     background-color:#eeeeee;
-    height:550px;
-    width:150px;
+    height:640px;
+    width:100px;
     float:left;
-    padding:5px;	      
+    padding:5px;        
 }
-#Lside {
-    width:750px;
+#section {
+    width:350px;
     float:left;
-     height:550px;
-    padding:10px;	 	 
+    padding:10px;    
 }
-#Rside {
+#aside {
     line-height:30px;
     background-color:#ffeeee;
-     height:550px;
-    width:350px;
+     height:640px;
+    width:400px;
     float:right;
      padding:5px; 
 }
@@ -33,5 +31,5 @@
     color:white;
     clear:both;
     text-align:center;
-   padding:5px;	 	 
+   padding:5px;    
 }

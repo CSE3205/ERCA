@@ -5,11 +5,11 @@ class Validate {
 			$_db =null;
 
 	public function __construct() {
-		$this->_db = DB::getInstance()''
+		$this->_db = DB::getInstance();
 	}
 
 	public function check($source, $items = array()) {
-		foreach($items as item => $rules) {
+		foreach($items as $item => $rules) {
 			foreach($rules as $rule => $rule_value) {
 
 				$value = $source [$item];
@@ -26,16 +26,16 @@ class Validate {
 						break;
 						case 'max' :
 							if(strlen($value) > $rule_value) {
-								$this->addError("{item} cannot be greater than {$rule_value}");
+								$this->addError("{$item} cannot be greater than {$rule_value}");
 							}
 						break;
-						case 'unique' :
+						/*case 'unique' :
 							$check = $this->_db->get($rule_value, array($item, '=', $value));
 							if($check->count()) {
 								$this->addError("{item} {$rule_value} is already registered");
 							}
 
-						break;
+						break;*/
 						
 					}
 
@@ -52,6 +52,9 @@ class Validate {
 
 	private function addError($error) {
 		$this->_errors[] = $error;
+	}
+	public function errors() {
+		return $this->_errors;
 	}
 
 	public function passed() {

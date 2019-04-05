@@ -1,12 +1,104 @@
 delimiter /
-create or replace trigger catagorize 
-before insert or update
-on payement
-for each row 
+create or replace function calctax(income numeric(12,2))
+RETURNS decimal(12,2)
 begin
-if(new.yr_income>500000) then
-set new.category ="vat";
-end if;
+    declare inc, tax, minus, pay decimal(12,2);
+    declare exit_loop boolean DEFAULT FALSE;
+    declare rs cursor for select * from tax order by 	tax_income desc;
+    declare continue handler for not found set exit_loop=true;
+    open rs;
+    tax_loop: loop
+        fetch rs into inc,tax,minus;
+        if exit_loop THEN
+            leave tax_loop;
+        end if;
+        if income > inc then
+           set pay = income * tax;
+           set pay = pay - minus;
+        end if;
+    end loop tax_loop;
+    close rs;
+    return pay;
+end
+/
+delimiter ;
+			
+delimiter /
+create or replace function calctot(tin_num int(20))
+	RETURNS DECIMAL(12,2) 
+	begin 
+		declare vt, incom decimal(12,2); 
+		select income into incom from kurt where tin_no= tin_num; 
+		select tot into vt from tot; 
+		return income*vt; 
+	end 
+/
+delimiter ;
+
+
+delimiter /
+create or replace function calcclean(income numeric(12))
+returns decimal(12,2)
+
+begin
+	declare inc, clean, minus, plus, pay decimal(12,2);
+	declare exit_loop boolean DEFAULT FALSE;
+	declare rs cursor for select * from clean_up order by clean_up_income ;
+    declare continue handler for not found set exit_loop=true;
+	open rs;
+	loop_clean: loop
+		fetch rs into inc,clean,minus,plus;
+		if exit_loop THEN
+            leave loop_clean;
+        end if;
+		if income<inc then
+			set pay=(income-minus)*clean+plus;
+		end if;
+	end loop;
+	close rs;
+	return pay;
+end;
+/
+delimiter ;
+
+delimiter /
+create or replace procedure insertbook
+(m_name varchar(20),m_fname varchar(20),m_lname varchar(20),
+m_tin_no numeric(20),m_file_no varchar(20),
+w_kebele numeric(2),w_date_tin date,w_date_rent date,
+w_date_license date,w_type_of_work varchar(20),
+b_cashregister varchar(10),
+p_category varchar(10))
+begin
+	insert into merchant values
+	(m_tin_no,m_name,m_fname,m_lname,m_file_no);
+	insert into work values
+	(m_tin_no,w_type_of_work,w_date_tin,w_date_rent,w_date_license,w_kebele,"new");
+	insert into book values
+	(m_tin_no,w_type_of_work,b_cashregister);
+	insert into payement values
+	(m_tin_no,w_type_of_work,p_category);
+end;
+/
+delimiter ;
+
+delimiter /
+create or replace procedure insertvehicle
+(m_name varchar(20),m_fname varchar(20),m_lname varchar(20),
+m_tin_no numeric(20),m_file_no varchar(20),
+w_kebele numeric(2),w_date_tin date,w_date_rent date,
+w_date_license date,w_type_of_work varchar(20),
+v_type_id numeric(3),v_date_production date,
+p_category varchar(10))
+begin
+insert into merchant values
+(m_tin_no,m_name,m_fname,m_lname,m_file_no);
+insert into work values
+(m_tin_no,w_type_of_work,w_date_tin,w_date_rent,w_date_license,w_kebele,"new");
+insert into vehichle values
+(m_tin_no,w_type_of_work,v_type_id,v_date_production);
+insert into payement values
+(m_tin_no,w_type_of_work,p_category);
 end;
 /
 delimiter ;
@@ -33,43 +125,84 @@ end;
 delimiter ;
 
 delimiter /
-create or replace procedure insertbook
-(m_name varchar(20),m_fname varchar(20),m_lname varchar(20),
-m_tin_no numeric(20),m_file_no varchar(20),
-w_kebele numeric(2),w_date_tin date,w_date_rent date,
-w_date_license date,w_type_of_work varchar(20),
-b_cashregister varchar(10),
-p_category varchar(10))
+create or replace function totcalc(income int,cat varchar(10))
+returns decimal(12,2)
 begin
-insert into merchant values
-(m_tin_no,m_name,m_fname,m_lname,m_file_no);
-insert into work values
-(m_tin_no,w_type_of_work,w_date_tin,w_date_rent,w_date_license,w_kebele,"new");
-insert into book values
-(m_tin_no,w_type_of_work,b_cashregister);
-insert into payement values
-(m_tin_no,w_type_of_work,p_category);
+	declare t, pay decimal(12,2);
+	select tot into t from totVat where category=cat;
+	if income > 500000 then
+		set pay=income * t;
+	elseif income > 475000 then
+		set pay=475000 * t;
+	elseif income > 450000 then
+		set pay=450000 * t;
+	elseif income > 425000 then
+		set pay=425000 * t;
+	elseif income > 400000 then
+		set pay=400000 * t;
+	elseif income > 375000 then
+		set pay=375000 * t;
+	elseif income > 350000 then
+		set pay=350000 * t;
+	elseif income > 325000 then
+		set pay=325000 * t;
+	elseif income > 300000 then
+		set pay=300000 * t;
+	elseif income > 275000 then
+		set pay=275000 * t;
+	elseif income > 250000 then
+		set pay=250000 * t;
+	elseif income > 225000 then
+		set pay=225000 * t;
+	elseif income > 200000 then
+		set pay=200000 * t;
+	elseif income > 175000 then
+		set pay=175000 * t;
+	elseif income > 150000 then
+		set pay=150000 * t;
+	elseif income > 125000 then
+		set pay=125000 * t;
+	elseif income > 100000 then
+		set pay=100000 * t;
+	elseif income > 75000 then
+		set pay=75000 * t;
+	elseif income > 50000 then
+		set pay=50000 * t;
+	elseif income > 25000 then
+		set pay=25000 * t;
+	end if;	
+	return pay;
 end;
 /
 delimiter ;
 
 delimiter /
-create or replace procedure insertvehicle
-(m_name varchar(20),m_fname varchar(20),m_lname varchar(20),
-m_tin_no numeric(20),m_file_no varchar(20),
-w_kebele numeric(2),w_date_tin date,w_date_rent date,
-w_date_license date,w_type_of_work varchar(20),
-v_type_id numeric(3),v_date_production date,
-p_category varchar(10))
+create or replace function login(userNam varchar(20), pasword varchar(20))
+	returns int
+	begin
+		declare typ varchar(20);
+		select type into typ from users where userName=userNam and password=pasword;
+		case typ
+			when NULL then return 0;
+			when "manager" then return 1;
+			when "employee" then return 2;
+			when "official" then return 3;
+			else return 0;
+		end case;
+	end;
+	/
+	delimiter ;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+delimiter /
+create or replace trigger catagorize 
+before insert or update
+on payement
+for each row 
 begin
-insert into merchant values
-(m_tin_no,m_name,m_fname,m_lname,m_file_no);
-insert into work values
-(m_tin_no,w_type_of_work,w_date_tin,w_date_rent,w_date_license,w_kebele,"new");
-insert into vehichle values
-(m_tin_no,w_type_of_work,v_type_id,v_date_production);
-insert into payement values
-(m_tin_no,w_type_of_work,p_category);
+if(new.yr_income>500000) then
+set new.category ="vat";
+end if;
 end;
 /
 delimiter ;
@@ -162,104 +295,8 @@ end;
 delimiter ;
 
 
-delimiter /
-create or replace function taxcalc(income numeric(12,2))
-retruns int
-declare rs cursor for select * from tax order by tax_income desc;
-begin
-	open rs;
-	loop
-		fetch rs into @inc,@tax,@minus;
-		if income > @inc then
-			@pay=(income*@tax)-@minus;
-		end if;
-	exit when rs%notfound;
-	end loop;
-return @pay;
-end;
-/
-delimiter ;
-			
-delimiter /
-create or replace function vatcalc(income numeric(12))
-returns int
-begin
-select vat into @vat from vat;
-return income*@vat;
-end;
-/
-delimiter ;
 
 
-delimiter /
-create or replace function cleancalc(income numeric(12))
-returns int
-declare
-rs cursor for select * from clean_up order by clean_up_income ;
-begin
-	open rs;
-	loop
-		fetch rs into @inc,@clean,@minus,@plus;
-		if income<@inc then
-			@pay=(income-@minus)*@clean+@plus;
-		end if;
-	end loop;
-	close rs;
-	return @pay;
-end;
-/
-delimiter ;
-
-delimiter /
-create or replace function totcalc(income int,cat varchar(10))
-returns int
-begin
-	select tot into @t from tot where category=cat;
-	if income > 500000 then
-		@pay=income * @t;
-	elseif income > 475000 then
-		@pay=475000 * @t;
-	elseif income > 450000 then
-		@pay=450000 * @t;
-	elseif income > 425000 then
-		@pay=425000 * @t;
-	elseif income > 400000 then
-		@pay=400000 * @t;
-	elseif income > 375000 then
-		@pay=375000 * @t;
-	elseif income > 350000 then
-		@pay=350000 * @t;
-	elseif income > 325000 then
-		@pay=325000 * @t;
-	elseif income > 300000 then
-		@pay=300000 * @t;
-	elseif income > 275000 then
-		@pay=275000 * @t;
-	elseif income > 250000 then
-		@pay=250000 * @t;
-	elseif income > 225000 then
-		@pay=225000 * @t;
-	elseif income > 200000 then
-		@pay=200000 * @t;
-	elseif income > 175000 then
-		@pay=175000 * @t;
-	elseif income > 150000 then
-		@pay=150000 * @t;
-	elseif income > 125000 then
-		@pay=125000 * @t;
-	elseif income > 100000 then
-		@pay=100000 * @t;
-	elseif income > 75000 then
-		@pay=75000 * @t;
-	elseif income > 50000 then
-		@pay=50000 * @t;
-	elseif income > 25000 then
-		@pay=25000 * @t;
-	end if;	
-	return @pay;
-end;
-/
-delimiter ;
 
 
 
