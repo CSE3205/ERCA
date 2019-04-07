@@ -1,7 +1,7 @@
 <?php
 class DB {
 	private static $_instance = null; // a store of out result
-	public $_pdo, 
+	private $_pdo, 
 			$_query, 
 			$_error = false, 
 			$_results, 

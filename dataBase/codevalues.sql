@@ -106,5 +106,5 @@ insert into clean_up values(65000000,0.00027,35000000,17225);
 insert into users values('henz123','henz123','Henok','Fekade','Abebe','employee','hired',curdate());
 insert into users values('kal123','kal123','Kaleab','Alebachew','MOlla','manager','hired',curdate());
 
-CREATE USER 'app'@'%' IDENTIFIED BY '***';GRANT SELECT ON *.* TO 'app'@'%';
+CREATE USER 'app'@'127.0.0.1' IDENTIFIED BY '***';GRANT SELECT, EXECUTE ON `revenue`.*  TO 'app'@'127.0.0.1';GRANT FILE ON *.* TO 'app'@'127.0.0.1';
 	
